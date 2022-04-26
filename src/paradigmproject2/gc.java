@@ -11,8 +11,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 public class gc {
     public ArrayList<object> heapArray; //heap.csv
-    private HashMap<Integer, object> heapHashMap;
-    private ArrayList<Integer> roots;
+    public HashMap<Integer, object> heapHashMap;
+    public ArrayList<Integer> roots;
     public ArrayList handleroots(String rootsfile) {
         ArrayList<Integer> roots = new ArrayList<Integer>();
         try {

@@ -3,30 +3,48 @@ package paradigmproject2;
 import java.util.ArrayList;
 import java.util.HashMap;
 public class Markandsweep {
-    public static gc mar =new gc("/home/bassant/heap.csv", "/home/bassant/roots.txt" , "/home/bassant/pointers.csv");
-    public static ArrayList<object> markandsweep(){
-        mar.mark();
-        sweep();
-        return mar.heapArray;
+   // public static gc mar =new gc("/home/bassant/heap.csv", "/home/bassant/roots.txt" , "/home/bassant/pointers.csv");
+    public ArrayList<object> heapArray; //heap.csv
+    private HashMap<Integer, object> heapHashMap;
+    private ArrayList<Integer> roots;
+
+    private Markandsweep(ArrayList<object> heapArray, HashMap<Integer, object> heapHashMap, ArrayList<Integer> roots){
+        this.heapArray = heapArray;
+        this.heapHashMap =heapHashMap;
+        this.roots=roots;
     }
-    private static void sweep(){
+    private void markobject ( object object ){
+        if( object.isMarked() ) return;
+        object.setMarked(true);
+        for( object child : object.getChildren() ) markobject(child);
+    }
+    public void mark (){
+        for( int rootId : roots ){
+            markobject(heapHashMap.get( rootId ));
+        }
+    }
+    public ArrayList<object> markandsweep(){
+        mark();
+        sweep();
+        return heapArray;
+    }
+    private void sweep(){
         int p = 0;
-        for ( int i = 0 ; i < mar.heapArray.size() ; i++ ){
-            object node = mar.heapArray.get(i);
+        for ( int i = 0 ; i < heapArray.size() ; i++ ){
+            object node = heapArray.get(i);
             if( node.isMarked() ){
                 node.setMarked(false);
             }
             else{
-                mar.heapArray.remove(node);
+                heapArray.remove(node);
                 i--;
             }
         }
     }
     public static void main(String[] args) {
-
-       // gc garbagecollector =new gc("/home/bassant/heap.csv", "/home/bassant/roots.txt" , "/home/bassant/pointers.csv");
-        mar.storeHeap(markandsweep() , "/home/bassant/Downloads/mark andsweepheap.csv");
-
+        gc garbagecollector =new gc("/home/bassant/heap.csv", "/home/bassant/roots.txt" , "/home/bassant/pointers.csv");// to get input
+        var sweeping=new Markandsweep(garbagecollector.heapArray,garbagecollector.heapHashMap,garbagecollector.roots);
+        garbagecollector.storeHeap(sweeping.markandsweep() , "/home/bassant/IdeaProjects/Garbage_collector/mark andsweepheap.csv");
     }
 
 }
