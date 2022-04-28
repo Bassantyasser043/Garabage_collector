@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 public class Markandsweep {
    // public static gc mar =new gc("/home/bassant/heap.csv", "/home/bassant/roots.txt" , "/home/bassant/pointers.csv");
-    public ArrayList<object> heapArray; //heap.csv
+    private ArrayList<object> heapArray; //heap.csv
     private HashMap<Integer, object> heapHashMap;
     private ArrayList<Integer> roots;
 
@@ -13,14 +13,14 @@ public class Markandsweep {
         this.heapHashMap =heapHashMap;
         this.roots=roots;
     }
-    private void markobject ( object object ){
-        if( object.isMarked() ) return;
+   private void mark ( object object ){
+        if( object.isMarked()) return;
         object.setMarked(true);
-        for( object child : object.getChildren() ) markobject(child);
+        for( object child : object.getChildren() ) mark(child);
     }
     public void mark (){
-        for( int rootId : roots ){
-            markobject(heapHashMap.get( rootId ));
+        for( int rootId : roots){
+            mark(heapHashMap.get( rootId ));
         }
     }
     public ArrayList<object> markandsweep(){
